@@ -19,7 +19,7 @@ r = praw.Reddit(user_agent=user_agent)
 # user = r.get_redditor(user_name)
 comments = []
 subreddit = r.get_subreddit('askreddit')
-for submission in subreddit.get_hot(limit = 1):
+for submission in subreddit.get_hot(limit = 10):
 	forest_comments = submission.comments
 	flat_comments = praw.helpers.flatten_tree(forest_comments)
 	for comment in flat_comments:
