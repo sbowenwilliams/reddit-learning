@@ -19,13 +19,13 @@ r = praw.Reddit(user_agent=user_agent)
 # user = r.get_redditor(user_name)
 comments = []
 subreddit = r.get_subreddit('askreddit')
-for submission in subreddit.get_hot(limit = 10):
+for submission in subreddit.get_hot(limit = 1):
 	forest_comments = submission.comments
 	flat_comments = praw.helpers.flatten_tree(forest_comments)
 	for comment in flat_comments:
 		try:
 			comments.append(Comment(comment.body, 
-				comment.ups, 
+				(comment.ups - comment.downs), 
 				datetime.datetime.fromtimestamp(comment.created_utc).strftime('%Y-%m-%d %H:%M:%S'),
 				comment.author))
 		except AttributeError:
