@@ -10,6 +10,10 @@ import csv
 import codecs
 import json
 import sys
+import random
+
+from scrape import scrape_subreddit
+
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
@@ -48,12 +52,30 @@ def login_required(test):
 
 @app.route('/')
 def home():
+    # data = []
+    # comments = scrape_subreddit()
+    # for comment in comments:
+    #     comment.body = (comment.body[:199] + '...') if len(comment.body) > 199 else comment.body 
+    #     data.append(str(comment.body).encode('utf-8').strip() + " | " + str(comment.date) + " | " + 
+    #         str(comment.author) + " | " + str(comment.karma))
+    csv_files = ['askreddit.csv', 'ssbm.csv', 'news.csv', '4chan.csv', 'fitness.csv']
     data_compressed = []
-    data = [row for row in csv.reader(codecs.open('dict.csv', 'U', encoding='utf-8', errors = 'ignore'))]
-    for line in data:
-        line = ' | '.join(line)
-        data_compressed.append(line)
-    return render_template('pages/placeholder.home.html', context = json.dumps(data_compressed))
+
+    for csv_file in csv_files:
+        try:
+            data = [row for row in csv.reader(codecs.open(csv_file, 'U', encoding='utf-8', errors = 'replace'))]
+        except ValueError:
+            print "Fucking reddit amiright?"
+        for _ in range(5):
+            line = random.choice(data)
+            temp_line = []
+            for attribute in line:
+                attribute = (attribute[:199] + '...') if len(attribute) > 199 else attribute
+                temp_line.append(attribute)
+            line = ' | '.join(temp_line)
+            data_compressed.append(line)
+
+    return render_template('pages/placeholder.home.html', context = data_compressed)
 
 
 @app.route('/about')
