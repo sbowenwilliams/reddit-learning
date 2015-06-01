@@ -12,8 +12,6 @@ import json
 import sys
 import random
 
-from scrape import scrape_subreddit
-
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
@@ -58,12 +56,12 @@ def home():
     #     comment.body = (comment.body[:199] + '...') if len(comment.body) > 199 else comment.body 
     #     data.append(str(comment.body).encode('utf-8').strip() + " | " + str(comment.date) + " | " + 
     #         str(comment.author) + " | " + str(comment.karma))
-    csv_files = ['askreddit.csv', 'ssbm.csv', 'news.csv', '4chan.csv', 'fitness.csv']
+    csv_files = ['askreddit.csv', 'ssbm.csv', 'news.csv', '4chan.csv', 'fitness.csv', 'hentai.csv', 'gonewild.csv']
     data_compressed = []
 
     for csv_file in csv_files:
         try:
-            data = [row for row in csv.reader(codecs.open(csv_file, 'U', encoding='utf-8', errors = 'replace'))]
+            data = [row for row in csv.reader(codecs.open('data/' + csv_file, 'U', encoding='utf-8', errors = 'replace'))]
         except ValueError:
             print "Fucking reddit amiright?"
         for _ in range(5):
@@ -73,8 +71,10 @@ def home():
                 attribute = (attribute[:199] + '...') if len(attribute) > 199 else attribute
                 temp_line.append(attribute)
             line = ' | '.join(temp_line)
+            line += ' | ' + csv_file
+            line = line.replace(".csv", "")
             data_compressed.append(line)
-
+    random.shuffle(data_compressed)
     return render_template('pages/placeholder.home.html', context = data_compressed)
 
 

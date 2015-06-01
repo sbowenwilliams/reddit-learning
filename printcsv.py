@@ -11,7 +11,7 @@ sys.setdefaultencoding('utf-8')
 
 def comments():
     data_compressed = []
-    data = [row for row in csv.reader(codecs.open('fitness.csv', 'U', encoding='utf-8', errors = 'ignore'))]
+    data = [row for row in csv.reader(codecs.open('data/fitness.csv', 'U', encoding='utf-8', errors = 'ignore'))]
     for _ in range(5):
     	line = random.choice(data)
         temp_line = []
@@ -20,5 +20,4 @@ def comments():
             temp_line.append(attribute)
         line = ' | '.join(temp_line)
         data_compressed.append(line)
-    print data_compressed
 comments()
